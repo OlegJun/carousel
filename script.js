@@ -9,7 +9,9 @@ const previosButton = document.querySelector('.prev');
 const slideWidth = slides[0].offsetWidth;
 
 // Находим максимальное количество пролистывания, чтобы не перелистывать эдемент больше
-const maxSwap = slideWidth * 0.7
+let maxSwap = 0
+
+let minSwap = 0
 
 // Массив содеращий в себе все скорости перемещения
 let speedMassive = []
@@ -62,12 +64,17 @@ const nextSlideTouch = (event) => {
    if(event.type == 'touchstart') {
       startTouch = (event.targetTouches[0].clientX);
       value = startTouch
+      index == 0 ? maxSwap = -slideWidth * 0.7 : maxSwap = -slideWidth * 0.7 - (slideWidth * index)
+      index == 0 ? minSwap = slideWidth * 0.7 : minSwap = slideWidth * 0.7 - (slideWidth * index)
    } else {
 // Если событие touchmove то есть передвижение на touchscreen то тогда присваеваем переменной позицию разницы с учетом индекса
-      let difference = (event.targetTouches[0].clientX - startTouch) / (index + 1);
+      let difference = (-slideWidth * index) + (event.targetTouches[0].clientX - startTouch)
+      console.log(minSwap)
+      console.log(maxSwap)
+      console.log(difference)
 // Проверяем если разница между тапом и начальной позицией больше 
-      if(difference <= maxSwap && difference >= -maxSwap) {
-         functionFlippslide((-slideWidth * index) + difference)
+      if(difference <= minSwap && difference >= maxSwap) {
+         functionFlippslide(difference)
       }
 // Расчитываем скорость от старта до следущего события свайпа
       speed = (value - event.targetTouches[0].clientX)
