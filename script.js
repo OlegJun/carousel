@@ -69,9 +69,6 @@ const nextSlideTouch = (event) => {
    } else {
 // Если событие touchmove то есть передвижение на touchscreen то тогда присваеваем переменной позицию разницы с учетом индекса
       let difference = (-slideWidth * index) + (event.targetTouches[0].clientX - startTouch)
-      console.log(minSwap)
-      console.log(maxSwap)
-      console.log(difference)
 // Проверяем если разница между тапом и начальной позицией больше 
       if(difference <= minSwap && difference >= maxSwap) {
          functionFlippslide(difference)
@@ -85,14 +82,15 @@ const nextSlideTouch = (event) => {
    }
 }
 
-const touchEnd = () => {
+const touchEnd = (event) => {
 // Ищем самую большую и самую маленькую скорость движения и проверяем если они были больше или меньшу порога, то прокручиваем слайд
    const maxSpeed = Math.max(...speedMassive)
    const minSpeed = Math.min(...speedMassive)
-   if(maxSpeed >= 40) {
+   const differenceTouch = event.changedTouches[0].clientX - startTouch
+   if(maxSpeed >= 40 || differenceTouch <= -120) {
       nextSlide()
    }
-   if(minSpeed <= -40) {
+   if(minSpeed <= -40 || differenceTouch >= 120) {
       previoSlide()
    }
    functionFlippslide()
